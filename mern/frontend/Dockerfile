@@ -16,6 +16,6 @@ WORKDIR /app
 
 COPY --from=builder /app/dist .
 
-EXPOSE 5173  # ✅ Exposing the same port as your dev Dockerfile
-
+# Exposing the same port as your dev Dockerfile
+EXPOSE 5173  
 CMD ["server.js"]  # replace with your actual entry point
