@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mern-network
+
+  backend:
+    build: ./mern/backend
+    container_name: mern-backend
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=production
+      - PORT=5050
+    networks:
+      - mern-network
+
+  frontend:
+    build: ./mern/frontend
+    container_name: mern-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - mern-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  mern-network:
+    driver: bridge
